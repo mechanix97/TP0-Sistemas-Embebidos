@@ -52,6 +52,9 @@ bool shape_move(shape_t *me, uint32_t dx, uint32_t dy);
 **/
 float shape_distance_from(shape_t *me, shape_t *shape);
 
+bool shape_rotate(shape_t *me, float angle);
+bool shape_scale(shape_t *me, float factor);
+coordinate_t coordinate_rotate(coordinate_t position, coordinate_t center, float angle);
 
 /** 	@brief: Guarda la figura en una imagen
 *		@params: Recibe el puntero al objeto y el puntero a la imagen donde se guarda.

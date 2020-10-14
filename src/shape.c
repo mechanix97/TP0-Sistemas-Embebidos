@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include <stdio.h>
+
 #include "shape.h"
 #include "image.h"
 
@@ -54,27 +56,8 @@ bool shape_rotate(shape_t *me, float angle){
 	}
 	size_t len = me->array.n_array;
 
-	float arg = (angle * PI) / 180;
-
-	float s = sin(arg);
-	float c = cos(arg);
-
-	uint32_t origin_x =  me->position.x;
-	uint32_t origin_y =  me->position.y;
-
-
 	for(int i = 0; i < len; ++i){
-		double aux_x = me->array.coordinates[i].x;
-		double aux_y = me->array.coordinates[i].y;
-
-		aux_x -= origin_x;
-		aux_y -= origin_y;
-
-		double xnew = aux_x * c - aux_y * s;
-		double ynew = aux_x * s + aux_y * c;
-
-		me->array.coordinates[i].x = xnew + origin_x;
-		me->array.coordinates[i].y = ynew + origin_y;
+		me->array.coordinates[i] = coordinate_rotate(me->array.coordinates[i], me->position, angle);	
 	}
 	return true;
 }
@@ -110,4 +93,40 @@ bool shape_plot(shape_t *me, image_t *image){
 	}
 
 	return true;
+}
+
+bool shape_scale(shape_t *me, float factor){
+	if(!me){
+		return false;
+	}
+	size_t len = me->array.n_array;
+
+	for(int i = 0; i < len; ++i){
+		me->array.coordinates[i].x = round(me->array.coordinates[i].x * factor);
+		me->array.coordinates[i].y = round(me->array.coordinates[i].y * factor);
+	}
+	return true;
+}
+
+coordinate_t coordinate_rotate(coordinate_t position, coordinate_t center, float angle){
+	float arg = (angle * PI) / 180;
+
+	float s = sin(arg);
+	float c = cos(arg);
+
+	uint32_t x1 = position.x;
+	uint32_t y1 = position.y;
+
+	uint32_t origin_x = center.x;
+	uint32_t origin_y = center.y;
+
+	x1 -= origin_x;
+	y1 -= origin_y;
+
+	double xnew = x1 * c - y1 * s;
+	double ynew = x1 * s + y1 * c;
+
+	coordinate_t r = {round(xnew) + origin_x, round(ynew) + origin_y};
+
+	return r;
 }
