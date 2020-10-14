@@ -34,5 +34,4 @@ bool rectangle_rotate(rectangle_t *me, float angle);
 uint32_t rectangle_get_area(rectangle_t *me);
 
 
-
 #endif

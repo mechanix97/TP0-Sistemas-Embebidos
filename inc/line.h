@@ -1,5 +1,5 @@
-#ifndef RECTANGLE_H
-#define RECTANGLE_H 
+#ifndef LINE_H
+#define LINE_H 
 
 #include "shape.h"
 #include <stdint.h>

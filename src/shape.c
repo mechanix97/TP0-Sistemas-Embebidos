@@ -35,8 +35,9 @@ void shape_dtor(shape_t *me){
 	if(!me){
 		return;
 	}
-
-	free(me->array.coordinates);
+	if(me->array.coordinates){
+		free(me->array.coordinates);	
+	}	
 }
 
 bool shape_move(shape_t *me, uint32_t dx, uint32_t dy){
@@ -82,16 +83,13 @@ bool shape_plot(shape_t *me, image_t *image){
 	}
 	size_t len = me->array.n_array;
 
-	uint32_t origin_x =  me->position.x;
-	uint32_t origin_y =  me->position.y;
-
 	for(int i = 0; i < len; ++i){
-		uint32_t x = me->array.coordinates[i].x + origin_x;
-		uint32_t y = me->array.coordinates[i].y + origin_y;
-		image_write(image, x, y, HIGH);
-
+		uint32_t x = me->array.coordinates[i].x;
+		uint32_t y = me->array.coordinates[i].y;
+		if( x < image->n_cols && y < image->n_rows){
+			image_write(image, x, y, HIGH);	
+		}		
 	}
-
 	return true;
 }
 
@@ -101,9 +99,23 @@ bool shape_scale(shape_t *me, float factor){
 	}
 	size_t len = me->array.n_array;
 
+
 	for(int i = 0; i < len; ++i){
-		me->array.coordinates[i].x = round(me->array.coordinates[i].x * factor);
-		me->array.coordinates[i].y = round(me->array.coordinates[i].y * factor);
+		double x = me->array.coordinates[i].x;
+		double y = me->array.coordinates[i].y;
+
+		x = x - me->position.x;
+		y = y - me->position.y;
+
+		x*=factor;
+		y*=factor;
+
+		x = x + me->position.x;
+		y = y + me->position.y;
+
+		me->array.coordinates[i].x = round(x);
+		me->array.coordinates[i].y = round(y);
+
 	}
 	return true;
 }
@@ -114,19 +126,19 @@ coordinate_t coordinate_rotate(coordinate_t position, coordinate_t center, float
 	float s = sin(arg);
 	float c = cos(arg);
 
-	uint32_t x1 = position.x;
-	uint32_t y1 = position.y;
+	double x1 = position.x;
+	double y1 = position.y;
 
-	uint32_t origin_x = center.x;
-	uint32_t origin_y = center.y;
+	double origin_x = center.x;
+	double origin_y = center.y;
 
 	x1 -= origin_x;
 	y1 -= origin_y;
 
-	double xnew = x1 * c - y1 * s;
-	double ynew = x1 * s + y1 * c;
+	double xnew = x1 * c - y1 * s  + origin_x;
+	double ynew = x1 * s + y1 * c + origin_y;
 
-	coordinate_t r = {round(xnew) + origin_x, round(ynew) + origin_y};
+	coordinate_t r = {round(xnew), round(ynew) };
 
 	return r;
 }

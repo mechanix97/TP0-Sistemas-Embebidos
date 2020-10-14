@@ -15,3 +15,5 @@ Para convertir un conjunto de imágenes .pbm a un .gif animado, se sugiere hacer
 4. Clickear en "Make a GIF!"
 
 5. Seleccionar "Save" para descargar el gif.
+
+![alt text](https://github.com/Mechanix97/TP0-Sistemas-Embebidos/blob/master/Reloj.gif?raw=true
