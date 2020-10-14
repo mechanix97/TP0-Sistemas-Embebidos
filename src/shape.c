@@ -99,9 +99,12 @@ bool shape_plot(shape_t *me, image_t *image){
 	}
 	size_t len = me->array.n_array;
 
+	uint32_t origin_x =  me->position.x;
+	uint32_t origin_y =  me->position.y;
+
 	for(int i = 0; i < len; ++i){
-		uint32_t x = me->array.coordinates[i].x;
-		uint32_t y = me->array.coordinates[i].y;
+		uint32_t x = me->array.coordinates[i].x + origin_x;
+		uint32_t y = me->array.coordinates[i].y + origin_y;
 		image_write(image, x, y, HIGH);
 
 	}
