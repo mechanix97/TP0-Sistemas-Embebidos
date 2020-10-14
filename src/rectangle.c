@@ -1,4 +1,5 @@
 #include "shape.h"
+#include "rectangle.h"
 #include <stdint.h>
 #include <math.h>
 
