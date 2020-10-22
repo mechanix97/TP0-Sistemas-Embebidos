@@ -61,13 +61,13 @@ int main(void){
 		
 		// Libero memoria
 		image_dtor(&img); 
-		shape_dtor(&line1.super);
-		shape_dtor(&line2.super);
+		shape_dtor((shape_t *)&line1);
+		shape_dtor((shape_t *)&line2);
 
 		++img_count;
 	}
 
-	shape_dtor(&rect.super);
+	shape_dtor((shape_t *)&rect);
 	
 	return 0;
 }
